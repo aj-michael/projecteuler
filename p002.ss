@@ -7,5 +7,4 @@
           (if (even? c)
             (+ total c)
             total))))))
-
 (f 1 2 2)
