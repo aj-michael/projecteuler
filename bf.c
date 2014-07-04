@@ -12,6 +12,11 @@ int c;
 FILE *prog;
 
 int main(int argc, char **argv){
+    if(argc != 2){
+      printf("usage: %s <file name>\n",argv[0]);
+      return 0;
+    }
+    prog = fopen(argv[1],"r");
     codelength = fread(code, 1, MAXCODESIZE, prog);
     fclose(prog);
     for(codep=0; codep<codelength; codep++){
@@ -41,5 +46,6 @@ int main(int argc, char **argv){
             case ']': if(array[memp]) codep=targets[codep]; break;
         }
     }
-    exit(0);
+    printf("\n");
+    return 0;
 }
