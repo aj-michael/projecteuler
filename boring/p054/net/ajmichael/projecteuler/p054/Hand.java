@@ -50,6 +50,13 @@ public class Hand implements Comparable<Hand> {
 		}
 	}
 	
+	int onePairValue() {
+		for (Map.Entry<Integer, List<Integer>> e : cards.stream().map(o -> o.value).collect(Collectors.groupingBy(o -> o)).entrySet()) {
+			if (e.getValue().size() == 2) return e.getKey();
+		}
+		throw new NullPointerException();
+	}
+	
 	boolean isOnePair() {
 		return cards.stream().map(o -> o.value).collect(Collectors.groupingBy(o -> o)).size() < 5;
 	}
@@ -99,21 +106,83 @@ public class Hand implements Comparable<Hand> {
 	boolean isRoyalFlush() {
 		return cards.get(0).value == 10 && isStraightFlush();
 	}
+	
+	int highestValue() {
+		return cards.get(4).value;
+	}
 
 	@Override
 	public int compareTo(Hand that) {
-		if (this.getCachedScore() != that.getCachedScore()) {
-			return this.getCachedScore() - that.getCachedScore();
-		} else if (this.cards.get(0).value != that.cards.get(0).value) {
-			return this.cards.get(0).value - that.cards.get(0).value;
-		} else if (this.cards.get(1).value != that.cards.get(1).value) {
-			return this.cards.get(1).value - that.cards.get(1).value;
-		} else if (this.cards.get(2).value != that.cards.get(2).value) {
-			return this.cards.get(2).value - that.cards.get(2).value;
+		if (this.isRoyalFlush() && that.isRoyalFlush()) {
+			throw new RuntimeException("A");
+		} else if (this.isRoyalFlush()) {
+			return 1;
+		} else if (that.isRoyalFlush()) {
+			return -1;
+		} else if (this.isStraightFlush() && that.isStraightFlush()) {
+			throw new RuntimeException("B");
+		} else if (this.isStraightFlush()) {
+			return 1;
+		} else if (that.isStraightFlush()) {
+			return -1;
+		} else if (this.isFourOfAKind() && that.isFourOfAKind()) {
+			throw new RuntimeException("C");
+		} else if (this.isFourOfAKind()) {
+			return 1;
+		} else if (that.isFourOfAKind()) {
+			return -1;
+		} else if (this.isFullHouse() && that.isFullHouse()) {
+			throw new RuntimeException("D");
+		} else if (this.isFullHouse()) {
+			return 1;
+		} else if (that.isFullHouse()) {
+			return -1;
+		} else if (this.isFlush() && that.isFlush()) {
+			throw new RuntimeException("E");
+		} else if (this.isFlush()) {
+			return 1;
+		} else if (that.isFlush()) {
+			return -1;
+		} else if (this.isStraight() && that.isStraight()) {
+			throw new RuntimeException("F");
+		} else if (this.isStraight()) {
+			return 1;
+		} else if (that.isStraight()) {
+			return -1;
+		} else if (this.isThreeOfAKind() && that.isThreeOfAKind()) {
+			throw new RuntimeException("G");
+		} else if (this.isThreeOfAKind()) {
+			return 1;
+		} else if (that.isThreeOfAKind()) {
+			return -1;
+		} else if (this.isTwoPairs() && that.isTwoPairs()) {
+			throw new RuntimeException("H");
+		} else if (this.isTwoPairs()) {
+			return 1;
+		} else if (that.isTwoPairs()) {
+			return -1;
+		} else if (this.isOnePair() && that.isOnePair()) {
+			if (this.onePairValue() == that.onePairValue()) {
+				return this.getHighestCard() - that.getHighestCard();
+			} else {
+				return this.onePairValue() - that.onePairValue();
+			}
+		} else if (this.isOnePair()) {
+			return 1;
+		} else if (that.isOnePair()) {
+			return -1;
+		} else if (this.cards.get(4).value != that.cards.get(4).value) {
+			return this.cards.get(4).value - that.cards.get(4).value;
 		} else if (this.cards.get(3).value != that.cards.get(3).value) {
 			return this.cards.get(3).value - that.cards.get(3).value;
+		} else if (this.cards.get(2).value != that.cards.get(2).value) {
+			return this.cards.get(2).value - that.cards.get(2).value;
+		} else if (this.cards.get(1).value != that.cards.get(1).value) {
+			//return this.cards.get(1).value - that.cards.get(1).value;
+			throw new RuntimeException("Y");
 		} else {
-			return this.cards.get(4).value - that.cards.get(4).value;
+			throw new RuntimeException("Z");
+			//return this.cards.get(0).value - that.cards.get(0).value;
 		}
 	}
 	
